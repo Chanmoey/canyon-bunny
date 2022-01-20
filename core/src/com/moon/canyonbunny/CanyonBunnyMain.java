@@ -3,9 +3,11 @@ package com.moon.canyonbunny;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.moon.canyonbunny.controller.WorldController;
 import com.moon.canyonbunny.renderer.WorldRenderer;
+import com.moon.canyonbunny.texture.Assets;
 
 /**
  * 游戏的主类。
@@ -39,6 +41,9 @@ public class CanyonBunnyMain implements ApplicationListener {
     public void create() {
         // 设置日志级别
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+        // 加载资源
+        Assets.INSTANCE.init(new AssetManager());
 
         // 初始化控制器和渲染器
         this.worldController = new WorldController();
@@ -79,11 +84,13 @@ public class CanyonBunnyMain implements ApplicationListener {
 
     @Override
     public void resume() {
+        Assets.INSTANCE.init(new AssetManager());
         this.paused = false;
     }
 
     @Override
     public void dispose() {
         this.worldRenderer.dispose();
+        Assets.INSTANCE.dispose();
     }
 }

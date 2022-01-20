@@ -7,9 +7,11 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
+import com.moon.canyonbunny.texture.Assets;
 import com.moon.canyonbunny.util.CameraHelper;
-import com.sun.org.apache.xml.internal.dtm.ref.sax2dtm.SAX2DTM2;
 
 /**
  * @author Chanmoey
@@ -40,20 +42,28 @@ public class WorldController extends InputAdapter {
 
     private void initTestObjects() {
         this.testSprites = new Sprite[5];
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProcedurePixmap(width, height);
-        Texture texture = new Texture(pixmap);
+
+        // 创建一个TextureRegion列表
+        Array<TextureRegion> regions = new com.badlogic.gdx.utils.Array<>();
+        regions.add(Assets.INSTANCE.bunny.head);
+        regions.add(Assets.INSTANCE.feather.feather);
+        regions.add(Assets.INSTANCE.goldCoin.goldCoin);
+
+        // 随机选取TextureRegion创建Sprite对象
         for (int i = 0; i < this.testSprites.length; i++) {
-            Sprite sprite = new Sprite(texture);
+            Sprite sprite = new Sprite(regions.random());
+            // 设置精灵在游戏世界中的尺寸为1X1
             sprite.setSize(1, 1);
 
             // 设置精灵对象的原点为中心。
             sprite.setOrigin(sprite.getWidth() / 2.0f, sprite.getHeight() / 2.0f);
+
+            // 为精灵对象计算随机坐标
             float randomX = MathUtils.random(-2.0f, 2.0f);
             float randomY = MathUtils.random(-2.0f, 2.0f);
             sprite.setPosition(randomX, randomY);
 
+            // 将精灵对象添加到数组中
             this.testSprites[i] = sprite;
         }
 
@@ -103,7 +113,7 @@ public class WorldController extends InputAdapter {
         float cameraMoveSpeed = 5 * deltaTime;
         float cameraMoveSpeedAccelerationFactor = 5;
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-             cameraMoveSpeed *= cameraMoveSpeedAccelerationFactor;
+            cameraMoveSpeed *= cameraMoveSpeedAccelerationFactor;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             moveCamera(-cameraMoveSpeed, 0);
